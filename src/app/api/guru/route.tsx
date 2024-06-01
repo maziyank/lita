@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
-
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 
 import { AIMessage, ChatMessage, HumanMessage } from "@langchain/core/messages";
@@ -13,17 +10,12 @@ import {
   ChatPromptTemplate,
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
-
-import { UpstashVectorStore } from "@/app/vectorstore/UpstashVectorStore";
+import {
+  AzureAISearchVectorStore,
+  AzureAISearchQueryType,
+} from "@langchain/community/vectorstores/azure_aisearch";
 
 export const runtime = "edge";
-
-const redis = Redis.fromEnv();
-
-const ratelimit = new Ratelimit({
-  redis: redis,
-  limiter: Ratelimit.slidingWindow(1, "10 s"),
-});
 
 const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
   if (message.role === "user") {
@@ -37,23 +29,6 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
 
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.ip ?? "127.0.0.1";
-    const { success } = await ratelimit.limit(ip);
-
-    if (!success) {
-      const textEncoder = new TextEncoder();
-      const customString =
-        "Oops! It seems you've reached the rate limit. Please try again later.";
-
-      const transformStream = new ReadableStream({
-        async start(controller) {
-          controller.enqueue(textEncoder.encode(customString));
-          controller.close();
-        },
-      });
-      return new StreamingTextResponse(transformStream);
-    }
-
     const body = await req.json();
 
     /**
@@ -71,27 +46,32 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
 
     const chatModel = new ChatOpenAI({
-      modelName: "gpt-3.5-turbo-1106",
+      modelName: "gpt-4",
       temperature: 0.2,
-      // IMPORTANT: Must "streaming: true" on OpenAI to enable final output streaming below.
       streaming: true,
     });
 
     /**
      * Create vector store and retriever
      */
-    const vectorstore = await new UpstashVectorStore(new OpenAIEmbeddings());
-    const retriever = vectorstore.asRetriever(
+    const vectorstore = await new AzureAISearchVectorStore(
+      new OpenAIEmbeddings(),
       {
-        k: 6,
-        searchType: "mmr",
-        searchKwargs: {
-          fetchK: 20,
-          lambda: 0.5
+        search: {
+          type: AzureAISearchQueryType.SimilarityHybrid,
         },
-        verbose: false
       },
     );
+
+    const retriever = vectorstore.asRetriever({
+      k: 6,
+      searchType: "mmr",
+      searchKwargs: {
+        fetchK: 20,
+        lambda: 0.5,
+      },
+      verbose: false,
+    });
 
     /**
      * Wrap the retriever in a tool to present it to the agent in a
@@ -112,15 +92,7 @@ export async function POST(req: NextRequest) {
      */
 
     const AGENT_SYSTEM_TEMPLATE = `
-    You are an artificial intelligence university bot named DegreeGuru, programmed to respond to inquiries about Stanford in a highly systematic and data-driven manner.
-
-    Begin your answers with a formal greeting and sign off with a closing statement about promoting knowledge.
-
-    Your responses should be precise and factual, with an emphasis on using the context provided and providing links from the context whenever posible. If some link does not look like it belongs to stanford, don't use the link and the information in your response.
-
-    Don't repeat yourself in your responses even if some information is repeated in the context.
-    
-    Reply with apologies and tell the user that you don't know the answer only when you are faced with a question whose answer is not available in the context.
+    You are an artificial intelligence bot named Lita, programmed to respond to inquiries about Financial Knowledge
     `;
 
     const prompt = ChatPromptTemplate.fromMessages([
@@ -180,6 +152,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      console.log({ transformStream });
+
       return new StreamingTextResponse(transformStream);
     } else {
       /**
@@ -192,6 +166,8 @@ export async function POST(req: NextRequest) {
         chat_history: previousMessages,
       });
 
+      console.log({ result });
+
       const urls = JSON.parse(
         `[${result.intermediateSteps[0]?.observation.replaceAll("}\n\n{", "}, {")}]`,
       ).map((source: { url: any }) => source.url);
@@ -200,7 +176,7 @@ export async function POST(req: NextRequest) {
         {
           _no_streaming_response_: true,
           output: result.output,
-          sources: urls,
+          sources: [],
         },
         { status: 200 },
       );

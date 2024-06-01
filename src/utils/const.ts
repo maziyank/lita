@@ -1,15 +1,14 @@
 export const INITIAL_QUESTIONS = [
   {
-    content: "Are there resources for students interested in creative writing?",
+    content: "Apa itu Return on Investment?",
   },
   {
-    content: "Are there courses on environmental sustainability?",
+    content: "Apa itu mudharabah?",
   },
   {
-    content:
-      "Are there any workshops or seminars on entrepreneurship for students?",
+    content: "Apa produk simpanan dari Bank Mandiri?",
   },
   {
-    content: "What kinds of courses will I take as a philosophy major?",
+    content: "Apa perbedaan Obligasi dan Saham?",
   },
 ];

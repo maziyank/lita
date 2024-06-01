@@ -17,7 +17,7 @@ const Form = ({ inputProps, buttonProps, onSubmit }: Props, ref: any) => {
       {/*<Avatar isUser={true} className="md:size-10 bg-gray-300" />*/}
 
       <input
-        placeholder="Your question..."
+        placeholder="Pertanyaan anda..."
         required
         {...inputProps}
         className={cx(

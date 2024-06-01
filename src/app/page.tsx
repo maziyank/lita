@@ -22,9 +22,9 @@ export default function Home() {
         {
           id: "0",
           role: "system",
-          content: `**Welcome to DegreeGuru**
+          content: `**Selamat Datang di Ruang Lita**
 
-Your ultimate companion in navigating the academic landscape of Stanford.`,
+Unopininated and ultimate companion for improving your financial literacy.`,
         },
       ],
       onResponse: () => {
