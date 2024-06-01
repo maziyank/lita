@@ -1,50 +1,35 @@
 import { ComponentProps, forwardRef, useEffect, useState } from "react";
 import { IconArrowBack } from "@tabler/icons-react";
 import cx from "@/utils/cx";
+import assistant from "@/utils/assistant";
 
 export interface Props extends ComponentProps<"form"> {
   inputProps: ComponentProps<"input">;
   buttonProps: ComponentProps<"button">;
+  onAssitantChanged: any;
 }
 
-const Form = ({ inputProps, buttonProps, onSubmit }: Props, ref: any) => {
-  const [mode, setMode] = useState("Pemula");
+const Form = (
+  { inputProps, buttonProps, onSubmit, onAssitantChanged }: Props,
+  ref: any,
+) => {
   const [currentAssistant, setCurrentAssistant] = useState(0);
-  const asisten = [
-    {
-      nama: "Riski",
-      desc: "Penggiat Keuangan Anak Muda dari Jakarta",
-      welcomeMessage: "Halo Aku rizki dari Jaksel",
-      emoji: "👤",
-    },
-    {
-      nama: "Sari",
-      desc: "Influencer Keuangan yang sangat populer di sosmed",
-      welcomeMessage: "Halo Aku helena ",
-      emoji: "👸",
-    },
-    {
-      nama: "Tito",
-      desc: "Profesional yang sangat paham dengan produk keuangan di Indonesia",
-      welcomeMessage: "Halo Aku Pak Yudi",
-      emoji: "🕺",
-    },
-  ];
 
-  useEffect(() => {
-    console.log({ mode });
-  }, [mode]);
+  useEffect(
+    () => onAssitantChanged(currentAssistant),
+    [currentAssistant, onAssitantChanged],
+  );
 
   return (
     <div>
       <div className="flex justify-center my-2 items-center">
         <span className="transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">
-          ✨ {asisten[currentAssistant].desc}
+          ✨ {assistant[currentAssistant].desc}
         </span>
       </div>
       <div className="flex justify-center my-4 items-center gap-2">
         <span>Pilih Asisten AI: </span>
-        {asisten.map((item, index) => {
+        {assistant.map((item, index) => {
           return (
             <button
               key={index}
@@ -52,7 +37,7 @@ const Form = ({ inputProps, buttonProps, onSubmit }: Props, ref: any) => {
               className={`cursor-pointer select-none text-left   font-normal
           border border-gray-200 rounded-xl p-1 md:px-2 md:py-1
           hover:bg-zinc-50 hover:border-zinc-400 ${currentAssistant == index ? "bg-gray-200" : "bg-white"}`}
-              disabled={mode === "Profesional"}
+              disabled={currentAssistant === index}
               onClick={(e) => setCurrentAssistant(index)}
             >
               {item.emoji} {item.nama}
@@ -78,7 +63,6 @@ const Form = ({ inputProps, buttonProps, onSubmit }: Props, ref: any) => {
           )}
           type="text"
         />
-
         <button
           {...buttonProps}
           type="submit"

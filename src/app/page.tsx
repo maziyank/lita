@@ -5,7 +5,6 @@ import { Message as MessageProps, useChat } from "ai/react";
 import Form from "@/components/form";
 import Message from "@/components/message";
 import cx from "@/utils/cx";
-import PoweredBy from "@/components/powered-by";
 import MessageLoading from "@/components/message-loading";
 import { INITIAL_QUESTIONS } from "@/utils/const";
 
@@ -14,16 +13,17 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [streaming, setStreaming] = useState<boolean>(false);
+  const [assistantId, setAssistantId] = useState(0);
 
   const { messages, input, handleInputChange, handleSubmit, setInput } =
     useChat({
-      api: "/api/guru",
+      api: `/api/guru/${assistantId}`,
       initialMessages: [
         {
           id: "0",
           role: "system",
           content: `**Selamat Datang di Ruang Lita**
-
+          
 Unopininated and ultimate companion for improving your financial literacy.`,
         },
       ],
@@ -31,6 +31,10 @@ Unopininated and ultimate companion for improving your financial literacy.`,
         setStreaming(false);
       },
     });
+
+  const handleAssitantChange = (value: number) => {
+    setAssistantId(value);
+  };
 
   const onClickQuestion = (value: string) => {
     setInput(value);
@@ -52,6 +56,7 @@ Unopininated and ultimate companion for improving your financial literacy.`,
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
+      console.log({ e });
       e.preventDefault();
       handleSubmit(e);
       setStreaming(true);
@@ -114,12 +119,11 @@ Unopininated and ultimate companion for improving your financial literacy.`,
               value: input,
               onChange: handleInputChange,
             }}
+            onAssitantChanged={handleAssitantChange}
             buttonProps={{
               disabled: streaming,
             }}
           />
-
-          <PoweredBy />
         </div>
       </div>
     </main>

@@ -14,6 +14,7 @@ import {
   AzureAISearchVectorStore,
   AzureAISearchQueryType,
 } from "@langchain/community/vectorstores/azure_aisearch";
+import asisstant from "@/utils/assistant";
 
 export const runtime = "edge";
 
@@ -27,8 +28,12 @@ const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
   }
 };
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { slug: string } },
+) {
   try {
+    const asistantId = parseInt(params?.slug || "0");
     const body = await req.json();
 
     /**
@@ -57,6 +62,7 @@ export async function POST(req: NextRequest) {
     const vectorstore = await new AzureAISearchVectorStore(
       new OpenAIEmbeddings(),
       {
+        indexName: asisstant[asistantId].search_index,
         search: {
           type: AzureAISearchQueryType.SimilarityHybrid,
         },
@@ -70,7 +76,7 @@ export async function POST(req: NextRequest) {
         fetchK: 20,
         lambda: 0.5,
       },
-      verbose: false,
+      verbose: true,
     });
 
     /**
@@ -78,8 +84,9 @@ export async function POST(req: NextRequest) {
      * usable form.
      */
     const tool = createRetrieverTool(retriever, {
-      name: "search_latest_knowledge",
-      description: "Searches and returns up-to-date general information.",
+      name: "search_from_kb",
+      description:
+        "Search relevant information from knowledge base. Cite the sources.",
     });
 
     /**
@@ -91,12 +98,8 @@ export async function POST(req: NextRequest) {
      * You can customize this prompt yourself!
      */
 
-    const AGENT_SYSTEM_TEMPLATE = `
-    You are an artificial intelligence bot named Lita, programmed to respond to inquiries about Financial Knowledge
-    `;
-
     const prompt = ChatPromptTemplate.fromMessages([
-      ["system", AGENT_SYSTEM_TEMPLATE],
+      ["system", asisstant[asistantId].system_prompt],
       new MessagesPlaceholder("chat_history"),
       ["human", "{input}"],
       new MessagesPlaceholder("agent_scratchpad"),
@@ -111,7 +114,6 @@ export async function POST(req: NextRequest) {
     const agentExecutor = new AgentExecutor({
       agent,
       tools: [tool],
-      // Set this if you want to receive all intermediate steps in the output of .invoke().
       returnIntermediateSteps,
     });
 
@@ -152,8 +154,6 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      console.log({ transformStream });
-
       return new StreamingTextResponse(transformStream);
     } else {
       /**
@@ -166,12 +166,11 @@ export async function POST(req: NextRequest) {
         chat_history: previousMessages,
       });
 
-      console.log({ result });
-
       const urls = JSON.parse(
         `[${result.intermediateSteps[0]?.observation.replaceAll("}\n\n{", "}, {")}]`,
       ).map((source: { url: any }) => source.url);
 
+      console.log({ urls });
       return NextResponse.json(
         {
           _no_streaming_response_: true,
@@ -182,7 +181,6 @@ export async function POST(req: NextRequest) {
       );
     }
   } catch (e: any) {
-    console.log(e.message);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
