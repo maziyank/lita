@@ -7,6 +7,7 @@ import Message from "@/components/message";
 import cx from "@/utils/cx";
 import MessageLoading from "@/components/message-loading";
 import { INITIAL_QUESTIONS } from "@/utils/const";
+import UpstashLogo from "@/components/upstash-logo";
 
 export default function Home() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -18,15 +19,7 @@ export default function Home() {
   const { messages, input, handleInputChange, handleSubmit, setInput } =
     useChat({
       api: `/api/guru/${assistantId}`,
-      initialMessages: [
-        {
-          id: "0",
-          role: "system",
-          content: `**Selamat Datang di Ruang Lita**
-          
-Unopininated and ultimate companion for improving your financial literacy.`,
-        },
-      ],
+      initialMessages: [],
       onResponse: () => {
         setStreaming(false);
       },
@@ -67,15 +60,22 @@ Unopininated and ultimate companion for improving your financial literacy.`,
   return (
     <main className="relative max-w-screen-md p-4 md:p-6 mx-auto flex min-h-svh !pb-32 md:!pb-40 overflow-y-auto">
       <div className="w-full">
+        <div className="mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl bg-emerald-50">
+          <UpstashLogo height={40} width={40}/>
+          <div className="flex flex-col">
+            <span className="font-bold">Selamat Datang di Ruang Lita</span>
+            <span>Unopininated and ultimate companion for improving your financial literacy.</span>
+          </div>
+        </div>
         {messages.map((message: MessageProps) => {
-          return <Message key={message.id} {...message} />;
+          return <Message key={message.id} assistantId={assistantId} {...message}/>;
         })}
 
         {/* loading */}
         {streaming && <MessageLoading />}
 
         {/* initial question */}
-        {messages.length === 1 && (
+        {messages.length === 0 && (
           <div className="mt-4 md:mt-6 grid md:grid-cols-2 gap-2 md:gap-4">
             {INITIAL_QUESTIONS.map((message) => {
               return (

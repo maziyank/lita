@@ -86,7 +86,8 @@ export async function POST(
      */
     const tool = createRetrieverTool(retriever, {
       name: "search_from_kb",
-      description: "Searches and returns documents regarding query.",
+      description: `Searches and returns documents regarding query. 
+      If there is no relevant document, just say that you don't know, don't try to make up an answer`,
     });
 
     const prompt = ChatPromptTemplate.fromMessages([
