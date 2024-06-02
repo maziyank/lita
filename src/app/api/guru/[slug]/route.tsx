@@ -9,19 +9,12 @@ import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "@langchain/core/prompts"; 
+} from "@langchain/core/prompts";
 import asisstant from "@/utils/assistant";
-import { Client } from "@opensearch-project/opensearch"; 
+import { Opensearch } from "@/utils/opensearch";
 import { OpenSearchVectorStore } from "@langchain/community/vectorstores/opensearch";
 
-export const runtime = "edge";
-
-const os_client = new Client({
-  node: 'https://admin_jdih:JDIHjuara6065@62.72.7.91:5601',
-  ssl: {
-    rejectUnauthorized: false
-  }
-}); 
+// export const runtime = "edge";
 
 const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
   if (message.role === "user") {
@@ -64,17 +57,22 @@ export async function POST(
     /**
      * Create vector store and retriever
      */
+    const os_client = Opensearch();
     const vectorstore = await new OpenSearchVectorStore(
       new OpenAIEmbeddings(),
       {
         client: os_client,
-        indexName: asisstant[asistantId].search_index ,
-      }
-    ) 
+        vectorFieldName: "vector",
+        textFieldName: "content",
+        metadataFieldName: "source",
+        indexName: asisstant[asistantId].search_index,
+      },
+    );
+
+    console.log(asisstant[asistantId].search_index);
 
     const retriever = vectorstore.asRetriever({
       k: 6,
-      searchType: "mmr",
       searchKwargs: {
         fetchK: 20,
         lambda: 0.5,
@@ -88,10 +86,9 @@ export async function POST(
      */
     const tool = createRetrieverTool(retriever, {
       name: "search_from_kb",
-      description:
-        "Search relevant information from knowledge base. Cite the sources.",
+      description: "Searches and returns documents regarding query.",
     });
- 
+
     const prompt = ChatPromptTemplate.fromMessages([
       ["system", asisstant[asistantId].system_prompt],
       new MessagesPlaceholder("chat_history"),
