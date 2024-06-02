@@ -35,19 +35,19 @@ const Form = (
             <button
               key={index}
               type="button"
-              className={`flex cursor-pointer select-none text-left   font-normal
-          border border-gray-200 rounded p-1 md:px-2 md:py-1
+              className={`flex cursor-pointer select-none text-left font-normal
+          border border-gray-200 rounded p-1 md:px-1 md:py-1
           hover:bg-zinc-50 hover:border-zinc-400 ${currentAssistant == index ? "bg-gray-200" : "bg-white"}`}
               disabled={currentAssistant === index}
               onClick={(e) => setCurrentAssistant(index)}
             >
               <Image
-          className="w-10 h-10 rounded"
+          className="w-12 h-12 rounded"
           src={assistant[index].avatar}
           width={20}
           height={20}
           alt="Avatar"
-        /> <div className="flex flex-col px-2">
+        /> <div className="flex flex-col px-2 gap-0">
           <span className="font-bold">{item.nama}</span>
           <span>{item.character}</span>
         </div>

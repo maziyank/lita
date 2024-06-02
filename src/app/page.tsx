@@ -63,7 +63,7 @@ export default function Home() {
         <div className="mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl bg-emerald-50">
           <UpstashLogo height={40} width={40}/>
           <div className="flex flex-col">
-            <span className="font-bold">Selamat Datang di Ruang Lita</span>
+            <span className="font-bold">Selamat Datang di Ruang Pelitaku</span>
             <span>Unopininated and ultimate companion for improving your financial literacy.</span>
           </div>
         </div>

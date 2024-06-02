@@ -6,8 +6,8 @@ import cx from "@/utils/cx";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ruang Lita",
-  description: "Ruang Literasi Keuangan",
+  title: "Ruang Pelitaku",
+  description: "Ruang Pengetahuan Literasi Keuangan",
 };
 
 export default function RootLayout({
