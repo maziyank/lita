@@ -60,7 +60,7 @@ export default function Home() {
   return (
     <main className="relative max-w-screen-md p-4 md:p-6 mx-auto flex min-h-svh !pb-32 md:!pb-40 overflow-y-auto">
       <div className="w-full">
-        <div className="mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl bg-emerald-50">
+        <div className="mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-emerald-100 to-emerald-50">
           <UpstashLogo height={40} width={40}/>
           <div className="flex flex-col">
             <span className="font-bold">Selamat Datang di Ruang Pelitaku</span>

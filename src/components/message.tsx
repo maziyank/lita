@@ -17,7 +17,7 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
     <article
       className={cx(
         "mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl",
-        isUser ? "" : "bg-emerald-50",
+        isUser ? "" : "bg-gradient-to-b from-emerald-100 to-emerald-50",
       )}
     >
       {<Avatar isUser={isUser} assistantId={assistantId}/>}
