@@ -7,7 +7,7 @@ import Message from "@/components/message";
 import cx from "@/utils/cx";
 import MessageLoading from "@/components/message-loading";
 import { INITIAL_QUESTIONS } from "@/utils/const";
-import UpstashLogo from "@/components/upstash-logo";
+import Image from "next/image";
 
 export default function Home() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -60,9 +60,9 @@ export default function Home() {
   return (
     <main className="relative max-w-screen-md p-4 md:p-6 mx-auto flex min-h-svh !pb-32 md:!pb-40 overflow-y-auto">
       <div className="w-full">
-        <div className="mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-emerald-100 to-emerald-50">
-          <UpstashLogo height={40} width={40}/>
-          <div className="flex flex-col">
+        <div className="mb-2 flex items-start gap-2 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-emerald-100 to-emerald-50">
+          <Image src="/logo.png" alt="Logo" height={70} width={70}/>
+          <div className="flex flex-col align-middle pt-2">
             <span className="font-bold">Selamat Datang di Ruang Pelitaku</span>
             <span>Unopininated and ultimate companion for improving your financial literacy.</span>
           </div>
