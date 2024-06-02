@@ -9,14 +9,19 @@ import { AgentExecutor, createOpenAIFunctionsAgent } from "langchain/agents";
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
-} from "@langchain/core/prompts";
-import {
-  AzureAISearchVectorStore,
-  AzureAISearchQueryType,
-} from "@langchain/community/vectorstores/azure_aisearch";
+} from "@langchain/core/prompts"; 
 import asisstant from "@/utils/assistant";
+import { Client } from "@opensearch-project/opensearch"; 
+import { OpenSearchVectorStore } from "@langchain/community/vectorstores/opensearch";
 
 export const runtime = "edge";
+
+const os_client = new Client({
+  node: 'https://admin_jdih:JDIHjuara6065@62.72.7.91:5601',
+  ssl: {
+    rejectUnauthorized: false
+  }
+}); 
 
 const convertVercelMessageToLangChainMessage = (message: VercelChatMessage) => {
   if (message.role === "user") {
@@ -59,15 +64,13 @@ export async function POST(
     /**
      * Create vector store and retriever
      */
-    const vectorstore = await new AzureAISearchVectorStore(
+    const vectorstore = await new OpenSearchVectorStore(
       new OpenAIEmbeddings(),
       {
-        indexName: asisstant[asistantId].search_index,
-        search: {
-          type: AzureAISearchQueryType.SimilarityHybrid,
-        },
-      },
-    );
+        client: os_client,
+        indexName: asisstant[asistantId].search_index ,
+      }
+    ) 
 
     const retriever = vectorstore.asRetriever({
       k: 6,
@@ -88,16 +91,7 @@ export async function POST(
       description:
         "Search relevant information from knowledge base. Cite the sources.",
     });
-
-    /**
-     * Based on https://smith.langchain.com/hub/hwchase17/openai-functions-agent
-     *
-     * This default prompt for the OpenAI functions agent has a placeholder
-     * where chat messages get inserted as "chat_history".
-     *
-     * You can customize this prompt yourself!
-     */
-
+ 
     const prompt = ChatPromptTemplate.fromMessages([
       ["system", asisstant[asistantId].system_prompt],
       new MessagesPlaceholder("chat_history"),
