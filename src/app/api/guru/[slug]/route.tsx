@@ -51,7 +51,7 @@ export async function POST(
     const chatModel = new ChatOpenAI({
       modelName: "gpt-4",
       temperature: 0.2,
-      streaming: true,
+      streaming: false,
     });
 
     /**
@@ -69,15 +69,13 @@ export async function POST(
       },
     );
 
-    console.log(asisstant[asistantId].search_index);
-
     const retriever = vectorstore.asRetriever({
       k: 6,
       searchKwargs: {
         fetchK: 20,
         lambda: 0.5,
       },
-      verbose: true,
+      verbose: false,
     });
 
     /**
@@ -162,7 +160,6 @@ export async function POST(
         `[${result.intermediateSteps[0]?.observation.replaceAll("}\n\n{", "}, {")}]`,
       ).map((source: { url: any }) => source.url);
 
-      console.log({ urls });
       return NextResponse.json(
         {
           _no_streaming_response_: true,

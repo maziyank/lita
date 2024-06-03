@@ -3,11 +3,11 @@ import Markdown from "markdown-to-jsx";
 import cx from "@/utils/cx";
 import { Message as MessageProps } from "ai/react";
 import Image from "next/image";
-import { IconUser } from "@tabler/icons-react"; 
+import { IconUser } from "@tabler/icons-react";
 import assistant from "@/utils/assistant";
 
 interface MessagePropsMod extends MessageProps {
-  assistantId: number; 
+  assistantId: number;
 }
 
 const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
@@ -20,7 +20,7 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
         isUser ? "" : "bg-gradient-to-b from-emerald-100 to-emerald-50",
       )}
     >
-      {<Avatar isUser={isUser} assistantId={assistantId}/>}
+      {<Avatar isUser={isUser} assistantId={assistantId} />}
       <Markdown
         className={cx(
           "py-1.5 md:py-1 space-y-4",
@@ -39,11 +39,11 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
   );
 };
 
-const Avatar: React.FC<{ isUser?: boolean; className?: string; assistantId: number  }> = ({
-  isUser = false,
-  className,
-  assistantId
-}) => {
+const Avatar: React.FC<{
+  isUser?: boolean;
+  className?: string;
+  assistantId: number;
+}> = ({ isUser = false, className, assistantId }) => {
   return (
     <div
       className={cx(
@@ -52,13 +52,17 @@ const Avatar: React.FC<{ isUser?: boolean; className?: string; assistantId: numb
         className,
       )}
     >
-      {isUser ? <IconUser size={20} /> : <Image
+      {isUser ? (
+        <IconUser size={20} />
+      ) : (
+        <Image
           className="w-10 h-10 rounded-full"
-          src={ assistant[assistantId].avatar}
+          src={assistant[assistantId]?.avatar || "/icon-user.png"}
           width={20}
           height={20}
           alt="Avatar"
-        />}
+        />
+      )}
     </div>
   );
 };

@@ -49,7 +49,6 @@ export default function Home() {
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
-      console.log({ e });
       e.preventDefault();
       handleSubmit(e);
       setStreaming(true);
@@ -61,14 +60,19 @@ export default function Home() {
     <main className="relative max-w-screen-md p-4 md:p-6 mx-auto flex min-h-svh !pb-32 md:!pb-40 overflow-y-auto">
       <div className="w-full">
         <div className="mb-2 flex items-start gap-2 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-emerald-100 to-emerald-50">
-          <Image src="/logo.png" alt="Logo" height={70} width={70}/>
+          <Image src="/logo.png" alt="Logo" height={70} width={70} />
           <div className="flex flex-col align-middle pt-2">
             <span className="font-bold">Selamat Datang di Ruang Pelitaku</span>
-            <span>Unopininated and ultimate companion for improving your financial literacy.</span>
+            <span>
+              Unopininated and ultimate companion for improving your financial
+              literacy.
+            </span>
           </div>
         </div>
         {messages.map((message: MessageProps) => {
-          return <Message key={message.id} assistantId={assistantId} {...message}/>;
+          return (
+            <Message key={message.id} assistantId={assistantId} {...message} />
+          );
         })}
 
         {/* loading */}
