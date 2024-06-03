@@ -20,7 +20,7 @@ const Form = (
     () => onAssitantChanged(currentAssistant),
     [currentAssistant, onAssitantChanged],
   );
-
+  
   return (
     <div>
       <div className="flex justify-center my-2 items-center">
@@ -29,7 +29,6 @@ const Form = (
         </span>
       </div>
       <div className="flex justify-center my-4 items-center gap-2">
-        <span>Pilih Asisten AI: </span>
         {assistant.map((item, index) => {
           return (
             <button
