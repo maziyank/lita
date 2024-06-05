@@ -81,7 +81,7 @@ export default function Home() {
         })}
 
         {/* loading */}
-        {streaming && <MessageLoading />}
+        {streaming && <MessageLoading assistantId={assistantId} />}
 
         {/* initial question */}
         {messages.length === 0 && (

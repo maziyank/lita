@@ -2,7 +2,11 @@ import React from "react";
 import cx from "@/utils/cx";
 import { Avatar } from "@/components/message";
 
-const MessageLoading: React.FC = () => {
+interface MessageLoadingProps {
+  assistantId: number;
+}
+
+const MessageLoading: React.FC<MessageLoadingProps> = ({ assistantId }) => {
   return (
     <article
       className={cx(
@@ -10,7 +14,7 @@ const MessageLoading: React.FC = () => {
         "bg-emerald-50/80",
       )}
     >
-      <Avatar />
+      <Avatar assistantId={assistantId} />
 
       {/* https://github.com/n3r4zzurr0/svg-spinners/blob/main/svg-smil/3-dots-bounce.svg?short_path=50864c0 */}
       <svg
