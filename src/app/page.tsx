@@ -8,6 +8,11 @@ import cx from "@/utils/cx";
 import MessageLoading from "@/components/message-loading";
 import { INITIAL_QUESTIONS } from "@/utils/const";
 import Image from "next/image";
+import {
+  IconArrowRight,
+  IconLighter,
+  IconQuestionMark,
+} from "@tabler/icons-react";
 
 export default function Home() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -86,12 +91,12 @@ export default function Home() {
                 <button
                   key={message.content}
                   type="button"
-                  className="cursor-pointer select-none text-left bg-white font-normal
+                  className="flex cursor-pointer select-none text-left bg-white font-normal
                   border border-gray-200 rounded-xl p-3 md:px-4 md:py-3
                   hover:bg-zinc-50 hover:border-zinc-400"
                   onClick={() => onClickQuestion(message.content)}
                 >
-                  {message.content}
+                  <IconArrowRight /> {message.content}
                 </button>
               );
             })}
