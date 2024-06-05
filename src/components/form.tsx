@@ -62,7 +62,7 @@ const Form = (
         ref={ref}
       >
         <input
-          placeholder="Pertanyaan anda..."
+          placeholder="Tulis pertanyaanmu disini..."
           required
           {...inputProps}
           className={cx(

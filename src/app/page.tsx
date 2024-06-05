@@ -64,13 +64,15 @@ export default function Home() {
   return (
     <main className="relative max-w-screen-md p-4 md:p-6 mx-auto flex min-h-svh !pb-32 md:!pb-40 overflow-y-auto">
       <div className="w-full mb-16">
-        <div className="mb-2 flex items-start gap-2 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-violet-100 to-violet-50">
-          <Image src="/logo.png" alt="Logo" height={70} width={70} />
+        <div className="mb-2 flex items-start gap-2 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-violet-300 to-violet-200">
+          <Image src="/logo2.png" alt="Logo" height={70} width={70} />
           <div className="flex flex-col align-middle pt-2">
-            <span className="font-bold">Selamat Datang di Ruang Pelitaku</span>
-            <span>
-              Unopininated and ultimate companion for improving your financial
-              literacy.
+            <span className="font-bold text-violet-950">
+              Selamat Datang di Ruang Pelitaku
+            </span>
+            <span className="text-sm text-violet-950">
+              Tingkatkan literasi keuanganmu bersama kami. Disini kamu bisa
+              memilih asisten pintas sesuai dengan preferensi personalmu.
             </span>
           </div>
         </div>
@@ -91,7 +93,7 @@ export default function Home() {
                 <button
                   key={message.content}
                   type="button"
-                  className="flex cursor-pointer select-none text-left bg-white font-normal
+                  className="flex cursor-pointer select-none text-left bg-violet-50 font-normal
                   border border-gray-200 rounded-xl p-3 md:px-4 md:py-3
                   hover:bg-zinc-50 hover:border-zinc-400"
                   onClick={() => onClickQuestion(message.content)}
