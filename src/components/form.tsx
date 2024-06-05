@@ -24,7 +24,7 @@ const Form = (
   return (
     <div>
       <div className="flex justify-center my-2 items-center">
-        <span className="transition-all rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">
+        <span className="transition-all rounded bg-violet-950 p-2 text-xs text-white group-hover:scale-100">
           ✨ {assistant[currentAssistant].desc}
         </span>
       </div>
@@ -67,7 +67,7 @@ const Form = (
           {...inputProps}
           className={cx(
             "transition h-10 md:h-12 pl-4 pr-12 flex-1 rounded-xl",
-            "border border-gray-400 text-base",
+            "border border-gray-400 text-base bg-violet-50",
             "disabled:bg-gray-100",
             inputProps.className,
           )}
