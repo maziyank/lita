@@ -64,7 +64,7 @@ export default function Home() {
   return (
     <main className="relative max-w-screen-md p-4 md:p-6 mx-auto flex min-h-svh !pb-32 md:!pb-40 overflow-y-auto">
       <div className="w-full mb-16">
-        <div className="mb-2 flex items-start gap-2 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-emerald-100 to-emerald-50">
+        <div className="mb-2 flex items-start gap-2 p-4 md:p-5 rounded-2xl bg-gradient-to-b from-violet-100 to-violet-50">
           <Image src="/logo.png" alt="Logo" height={70} width={70} />
           <div className="flex flex-col align-middle pt-2">
             <span className="font-bold">Selamat Datang di Ruang Pelitaku</span>

@@ -17,7 +17,7 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
     <article
       className={cx(
         "mb-6 flex items-start gap-4 p-4 md:p-5 rounded-2xl",
-        isUser ? "" : "bg-gradient-to-b from-emerald-100 to-emerald-50",
+        isUser ? "" : "bg-gradient-to-b from-violet-100 to-violet-50",
       )}
     >
       {<Avatar isUser={isUser} assistantId={assistantId} />}
@@ -48,7 +48,7 @@ const Avatar: React.FC<{
     <div
       className={cx(
         "flex items-center justify-center size-10 shrink-0 rounded-full",
-        isUser ? "bg-gray-200 text-gray-700" : "bg-emerald-950",
+        isUser ? "bg-gray-200 text-gray-700" : "bg-violet-950",
         className,
       )}
     >

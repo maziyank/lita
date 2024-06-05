@@ -41,15 +41,15 @@ const Form = (
               onClick={(e) => setCurrentAssistant(index)}
             >
               <Image
-                className="w-10 h-10 rounded"
+                className="w-12 h-12 rounded"
                 src={assistant[index].avatar}
-                width={10}
-                height={10}
+                width={20}
+                height={20}
                 alt="Avatar"
               />{" "}
               <div className="flex flex-col px-2 sm:px-1 gap-0">
-                <span className="font-bold text-sm">{item.nama}</span>
-                <span className="text-sm">{item.character}</span>
+                <span className="font-bold text-base">{item.nama}</span>
+                <span className="text-base">{item.character}</span>
               </div>
             </button>
           );
