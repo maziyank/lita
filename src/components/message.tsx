@@ -16,7 +16,7 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
   return (
     <article
       className={cx(
-        "mb-4 flex items-start gap-4 p-4 md:p-5 rounded-2xl",
+        "mb-6 flex items-start gap-4 p-4 md:p-5 rounded-2xl",
         isUser ? "" : "bg-gradient-to-b from-emerald-100 to-emerald-50",
       )}
     >
