@@ -8,11 +8,8 @@ import cx from "@/utils/cx";
 import MessageLoading from "@/components/message-loading";
 import { INITIAL_QUESTIONS } from "@/utils/const";
 import Image from "next/image";
-import {
-  IconArrowRight,
-  IconLighter,
-  IconQuestionMark,
-} from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function Home() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -70,9 +67,17 @@ export default function Home() {
             <span className="font-bold text-violet-950">
               Selamat Datang di Ruang Pelitaku
             </span>
-            <span className="text-sm text-violet-950">
+            <span className="text-xs text-violet-950">
               Tingkatkan literasi keuanganmu bersama kami. Disini kamu bisa
-              memilih asisten pintas sesuai dengan preferensi personalmu.
+              memilih asisten pintas sesuai dengan preferensi personalmu. Anda
+              juga bisa menggunakan versi Whatsapp Bot melalui{" "}
+              <Link
+                href="https://wa.link/jp4uw2"
+                target="_blank"
+                className="font-bold"
+              >
+                Link Berikut.
+              </Link>
             </span>
           </div>
         </div>
