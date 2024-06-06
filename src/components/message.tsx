@@ -1,10 +1,11 @@
 import React from "react";
-import Markdown from "markdown-to-jsx";
 import cx from "@/utils/cx";
 import { Message as MessageProps } from "ai/react";
 import Image from "next/image";
 import { IconUser } from "@tabler/icons-react";
 import assistant from "@/utils/assistant";
+import Markdown, { RuleType } from "markdown-to-jsx";
+import TeX from "@matejmazur/react-katex";
 
 interface MessagePropsMod extends MessageProps {
   assistantId: number;
@@ -21,6 +22,7 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
       )}
     >
       {<Avatar isUser={isUser} assistantId={assistantId} />}
+
       <Markdown
         className={cx(
           "py-1.5 md:py-1 space-y-4",
@@ -30,6 +32,19 @@ const Message: React.FC<MessagePropsMod> = ({ content, role, assistantId }) => {
           overrides: {
             ol: ({ children }) => <ol className="list-decimal">{children}</ol>,
             ul: ({ children }) => <ol className="list-disc">{children}</ol>,
+            code: ({ children }) => (
+              <TeX as="div">{String.raw`${children}`}</TeX>
+            ),
+          },
+          renderRule(next, node, renderChildren, state) {
+            console.log({ node });
+            if (node.type === "3" && node.lang === "latex") {
+              return (
+                <TeX as="div" key={state.key}>{String.raw`${node.text}`}</TeX>
+              );
+            }
+
+            return next();
           },
         }}
       >

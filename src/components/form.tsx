@@ -28,14 +28,14 @@ const Form = (
           ✨ {assistant[currentAssistant].desc}
         </span>
       </div>
-      <div className="flex justify-center my-4 items-center gap-2">
+      <div className="flex justify-center my-4 items-center gap-2  w-full overflow-x-auto">
         {assistant.map((item, index) => {
           return (
             <button
               key={index}
               type="button"
               className={`flex cursor-pointer select-none text-left font-normal
-          border border-gray-200 rounded p-1 md:px-1 md:py-1
+          border border-gray-200 rounded p-1 md:px-2 md:py-1 min-w-40 gap-2
           hover:bg-zinc-50 hover:border-zinc-400 ${currentAssistant == index ? "bg-gray-200" : "bg-white"}`}
               disabled={currentAssistant === index}
               onClick={(e) => setCurrentAssistant(index)}
